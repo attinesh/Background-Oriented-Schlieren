@@ -36,8 +36,8 @@ b=(Rhs);
 %     p(:,end)= 1;% bottom
     
 % Neumann's conditions
-    p(:,1)=p(:,2); %top
-    p(:,end)=p(:,end-1); % bottom
+%     p(:,1)=p(:,2); %top
+%     p(:,end)=p(:,end-1); % bottom
 
 %% Left and Right
 
