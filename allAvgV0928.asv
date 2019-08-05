@@ -80,12 +80,11 @@ dt = 21171.8*1e-6;
     
     % Want to compare?
 
-    figure(5)
-    pcolor(x,y,epx); shading interp;
-    colorbar;
-    figure(6)
-    pcolor(xnew,ynew,epx_new); shading interp;
-    colorbar;
+%     figure(5)
+%     pcolor(x,y,epx); shading interp;
+%     figure(6)
+%     pcolor(xnew,ynew,epx_new); shading interp;
+    
     
     %% Refractive index
     eta0 = 1.0029;
@@ -128,7 +127,7 @@ dt = 21171.8*1e-6;
     shading interp
     colormap('jet(4096)')
     colorbar
-    set(gca,'clim',[1 1.7])
+%     set(gca,'clim',[1 1.7])
 %     
 %     figure(3)
 %     pcolor(x(2:width-1,2:height-1),y(2:width-1,2:height-1),rho)

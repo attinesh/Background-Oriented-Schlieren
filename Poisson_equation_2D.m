@@ -1,9 +1,9 @@
 
-function [p,k,dx,dy]=Poisson_equation_2D(x,y,Rhs)
+function [p,k,dx,dy]=Poisson_equation_2D(x,y,dr_x,dr_y)
 
 % Solving the 2-D Poisson equation 
 
-[Nx,Ny]=size(Rhs);
+[Nx,Ny]=size(dr_x);
 
 
 %Specifying parameters 
@@ -17,11 +17,11 @@ b=zeros(Nx,Ny);                    %Preallocating b
 
 %%
 % Initial Conditions
-p=ones(Nx,Ny);                  %Preallocating p
+p=0.5.*ones(Nx,Ny);                  %Preallocating p
 
 %% 
 % Rhs=fliplr(Rhs);   
-b=(Rhs);
+% b=(Rhs);
 
 
 %Boundary conditions (Note: Dirichlet should be normalized)
@@ -47,11 +47,11 @@ b=(Rhs);
     
 % % Dirichlet's Conditions
     p(1,:)= 1; %Left
-    p(end,:)= .8;%Right
+    p(end,:)= 1.724;%Right
 
    
 % Poisson equation solution (Based on specified method (SOR, Gauss-Seidel etc))
- [p,k] = GaussSeidel(x,y,dx,dy,b,p);
+ [p,k] = GaussSeidel(x,y,dx,dy,dr_x,dr_y,p);
    
 end			
 

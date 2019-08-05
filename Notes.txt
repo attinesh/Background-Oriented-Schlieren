@@ -1,4 +1,0 @@
-1. Dt for the images can be looked up by selecting PIV processed image -> processing -> attributes-> add/modify attributes -> parameter -> FrameDt0
-
-
-Dt in this case is 21171.8 us 
