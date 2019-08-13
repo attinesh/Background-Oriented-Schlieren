@@ -51,7 +51,7 @@ p=0.5.*ones(Nx,Ny);                  %Preallocating p
 
    
 % Poisson equation solution (Based on specified method (SOR, Gauss-Seidel etc))
- [p,k] = GaussSeidel(x,y,dx,dy,dr_x,dr_y,p);
+ [p,k] = Jacobi(x,y,dx,dy,dr_x,dr_y,p);
    
 end			
 

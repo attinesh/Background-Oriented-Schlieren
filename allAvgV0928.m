@@ -25,7 +25,10 @@ dt = 21171.8*1e-6;
     shading flat
     colormap('jet(4096)')
     
-    % Draw ROI (square) and then double click to proceed 
+%% Draw ROI (square) and then double click to proceed 
+    % Note: there is a bug in the drawrectangle commands such that the size
+    % in x and y is off by one. Redraw and try again in this case.
+    
     h = drawrectangle(gca,'AspectRatio',1,'FixedAspectRatio',1);
     pos = customWait(h);
     
@@ -80,12 +83,12 @@ dt = 21171.8*1e-6;
     
     % Want to compare?
 
-    figure(5)
-    pcolor(x,y,epx); shading interp;
-    colorbar;
-    figure(6)
-    pcolor(xnew,ynew,epx_new); shading interp;
-    colorbar;
+%     figure(5)
+%     pcolor(x,y,epx); shading interp;
+%     colorbar;
+%     figure(6)
+%     pcolor(xnew,ynew,epx_new); shading interp;
+%     colorbar;
     
     %% Refractive index
     eta0 = 1.0029;
@@ -121,14 +124,20 @@ dt = 21171.8*1e-6;
     colormap('jet(4096)')
     colorbar;
     
-    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,etax/kgd,10.*etay/kgd);
+    % for laplace equation set rhs to 0
+    r1 = zeros(size(etax,1),size(etax,1));
+    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
+    
+    
+%     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,etax/kgd,etay/kgd);
 %     
     figure(4)
     pcolor(xnew,ynew,rho)
+    
     shading interp
     colormap('jet(4096)')
     colorbar
-    set(gca,'clim',[1 1.7])
+%     set(gca,'clim',[1 1.7])
 %     
 %     figure(3)
 %     pcolor(x(2:width-1,2:height-1),y(2:width-1,2:height-1),rho)
