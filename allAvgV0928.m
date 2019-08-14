@@ -1,11 +1,12 @@
-clc; clear vars; close all; tic;
+clc; clear all; close all; tic;
 addpath(genpath('D:\Papers and Data\Scitech 2020\Data\BOS\BOS_validation_supersonic_07232019\PIVmLibrary'))
 MatLabSettings
 load('ML.mat')
 
 fb = 3;
 ph = 80;
-kgd = 0.238e-3;
+% kgd = 0.238e-3;
+kgd = 0.0023;
 %% Create list of images to analyze. 
 numbers = ListPIVimages( img,{'AvgV'});
 dt = 21171.8*1e-6;
@@ -52,7 +53,7 @@ dt = 21171.8*1e-6;
     width = size(x,1);
     height = size(x,2);
     figure(2)
-    pcolor(x,y,epx);
+    pcolor(x,y,epy);
     shading interp
     colormap('jet(4096)')
     colorbar;
@@ -91,7 +92,7 @@ dt = 21171.8*1e-6;
 %     colorbar;
     
     %% Refractive index
-    eta0 = 1.0029;
+    eta0 = 1.00029;
     rho_air = 1.204;
     zd = 394.335e-3; % Distance of background from schliere
     h = 72.54e-3; % Width of the schliere - taken from wedge dimensions
@@ -99,6 +100,8 @@ dt = 21171.8*1e-6;
  
     etax = eta0*L*epx_new/(M*zd*h*rho_air);
     etay = eta0*L*epy_new/(M*zd*h*rho_air);
+    epsilon_x = etax./kgd;
+    epsilon_y = etay./kgd;
     detax = zeros(N-2,N-2);
     detay = zeros(N-2,N-2);
     for i = 2:N-1
@@ -110,8 +113,7 @@ dt = 21171.8*1e-6;
     x2 = xnew(2:end-1,2:end-1);
     y2 = ynew(2:end-1,2:end-1);
     
-    drho_x = etax/kgd;
-    drho_y = etay/kgd;
+    
     
     
 %% Define RHS
@@ -119,14 +121,14 @@ dt = 21171.8*1e-6;
   
     rhs = (detax+detay)./kgd;
     figure(3)
-    pcolor(x2,y2,rhs);
+    pcolor(diff(epsilon_x));
     shading interp
     colormap('jet(4096)')
     colorbar;
     
     % for laplace equation set rhs to 0
     r1 = zeros(size(etax,1),size(etax,1));
-    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
+    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,epsilon_x,epsilon_y);
     
     
 %     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,etax/kgd,etay/kgd);

@@ -17,7 +17,7 @@ b=zeros(Nx,Ny);                    %Preallocating b
 
 %%
 % Initial Conditions
-p=0.5.*ones(Nx,Ny);                  %Preallocating p
+p=ones(Nx,Ny);                  %Preallocating p
 
 %% 
 % Rhs=fliplr(Rhs);   
