@@ -15,42 +15,54 @@ k = 0;
 
 pn = zeros(M,M);
 pi = p;
-res = pn;
+res = zeros(M+1,M+2);
 % Impose BC on pn
 
 pn(1,:) = p(1,:);
-pn(M,:) = p(M,:);
+% pn(M,:) = p(M,:);
 done = false;
+
+% Add ghost points on Neumann BC
+
+pn = [pn; pn(end,:)]; % for i = M
+pn = horzcat(pn(:,1), pn); % for j = 1
+pn = horzcat(pn, pn(:,end)); % fpr j = M
+
+pi = [pi; pi(end,:)]; % for i = M
+pi = horzcat(pi(:,1), pi); % for j = 1
+pi = horzcat(pi, pi(:,end)); % fpr j = M
+
+dr_x = [dr_x; dr_x(end,:)]; % for i = M
+dr_x = horzcat(dr_x(:,1), dr_x); % for j = 1
+dr_x = horzcat(dr_x, dr_x(:,end)); % fpr j = M
+
+dr_y = [dr_y; dr_y(end,:)]; % for i = M
+dr_y = horzcat(dr_y(:,1), dr_y); % for j = 1
+dr_y = horzcat(dr_y, dr_y(:,end)); % fpr j = M
+
+
+
 
 while ~done
    
     k = k+1;
     
-    for i = 2:M-1
-        for j = 1:M     
-            if j == M 
-                pn(i,j) = -(1/4).*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j))) - (pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j-1)));
-%                  pn(i,j) = (1/4).*((pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j-1))); 
-                 res(i,j) = pi(i,j) + 0.25.*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j))) - (pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j-1)));
-            elseif j == 1
-                pn(i,j) = -(1/4).*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j))) - (pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j+1)));
-%                 pn(i,j) = (1/4).*((pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j+1)));
-                res(i,j) = pi(i,j) + 0.25.*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j))) - (pi(i-1,j)+pi(i+1,j)+ 2*pi(i,j+1)));
- 
-            else
+    for i = 2:M
+        for j = 2:M+1                 
                 pn(i,j) = -0.25.*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j)+dr_y(i,j+1)-dr_y(i,j-1))) - (pi(i-1,j)+pi(i,j-1)+pi(i,j+1)+pi(i+1,j)));
 %                 pn(i,j) = 0.25.*((pi(i-1,j)+pi(i,j-1)+pi(i,j+1)+pi(i+1,j)));
                 res(i,j) = pi(i,j) + 0.25.*(((dx/2).*(dr_x(i+1,j)-dr_x(i-1,j)+dr_y(i,j+1)-dr_y(i,j-1))) - (pi(i-1,j)+pi(i,j-1)+pi(i,j+1)+pi(i+1,j)));
-            end
+%                 res(i,j) = pi(i,j) - 0.25.*(pi(i-1,j)+pi(i,j-1)+pi(i,j+1)+pi(i+1,j));
         end
     end
+    
 
     if norm(res(:),2) <tol
             done = true;
     end
     
-pi = pn;   
+pi = pn;
+end
+out = pn(1:M,2:M+1);
 end
 
-out = pn;
-end

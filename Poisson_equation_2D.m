@@ -47,7 +47,7 @@ p=ones(Nx,Ny);                  %Preallocating p
     
 % % Dirichlet's Conditions
     p(1,:)= 1; %Left
-    p(end,:)= 1.724;%Right
+%     p(end,:)= 1.724;%Right
 
    
 % Poisson equation solution (Based on specified method (SOR, Gauss-Seidel etc))

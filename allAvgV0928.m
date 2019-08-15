@@ -1,12 +1,13 @@
 clc; clear all; close all; tic;
+format long;
 addpath(genpath('D:\Papers and Data\Scitech 2020\Data\BOS\BOS_validation_supersonic_07232019\PIVmLibrary'))
 MatLabSettings
 load('ML.mat')
 
 fb = 3;
 ph = 80;
-% kgd = 0.238e-3;
-kgd = 0.0023;
+kgd = 0.238e-3;
+% kgd = 0.023;
 %% Create list of images to analyze. 
 numbers = ListPIVimages( img,{'AvgV'});
 dt = 21171.8*1e-6;
@@ -68,7 +69,7 @@ dt = 21171.8*1e-6;
     x = x./max(x(:,1));
     y = y./max(y(1,:));
     
-    N = 100;
+    N = 150;
 
     x_interp = linspace(0,1,N);
     y_interp = fliplr(x_interp);
@@ -78,8 +79,8 @@ dt = 21171.8*1e-6;
     
     xnew = xnew.*x_interp';
     ynew = ynew.*y_interp;
-    epx_new = interp2(x(:,1),y(1,:),epx,xnew(:,1),ynew(1,:));
-    epy_new = interp2(x(:,1),y(1,:),epy,xnew(:,1),ynew(1,:));
+    epx_new = interp2(x(:,1),y(1,:),epx,xnew(:,1),ynew(1,:),'spline');
+    epy_new = interp2(x(:,1),y(1,:),epy,xnew(:,1),ynew(1,:),'spline');
     
     
     % Want to compare?
@@ -121,17 +122,20 @@ dt = 21171.8*1e-6;
   
     rhs = (detax+detay)./kgd;
     figure(3)
-    pcolor(diff(epsilon_x));
+    
+    [depx_x,depx_y] = gradient(epsilon_x);
+    [depy_x,depy_y] = gradient(epsilon_y);
+    pcolor(xnew,ynew,depx_x+depy_y);
     shading interp
     colormap('jet(4096)')
     colorbar;
     
     % for laplace equation set rhs to 0
     r1 = zeros(size(etax,1),size(etax,1));
+%     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
+    
+    
     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,epsilon_x,epsilon_y);
-    
-    
-%     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,etax/kgd,etay/kgd);
 %     
     figure(4)
     pcolor(xnew,ynew,rho)
@@ -153,4 +157,3 @@ dt = 21171.8*1e-6;
 
 
 
-% Branch test 
