@@ -125,17 +125,17 @@ dt = 21171.8*1e-6;
     
     [depx_x,depx_y] = gradient(epsilon_x);
     [depy_x,depy_y] = gradient(epsilon_y);
-    pcolor(xnew,ynew,depx_x+depy_y);
+    pcolor(xnew,ynew,epsilon_y);
     shading interp
     colormap('jet(4096)')
     colorbar;
     
     % for laplace equation set rhs to 0
-    r1 = zeros(size(etax,1),size(etax,1));
+    r1 = ones(size(etax,1),size(etax,1));
 %     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
     
     
-    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,epsilon_x,epsilon_y);
+    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
 %     
     figure(4)
     pcolor(xnew,ynew,rho)
