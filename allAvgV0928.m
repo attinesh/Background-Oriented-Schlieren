@@ -128,7 +128,7 @@ dt = 21171.8*1e-6;
     
     % for laplace equation set rhs to 0
     r1 = zeros(size(etax,1),size(etax,1));
-    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,epsilon_x,epsilon_y);
+    [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,r1,r1);
     
     
 %     [rho,k,dx,dy] = Poisson_equation_2D(x2,y2,etax/kgd,etay/kgd);
